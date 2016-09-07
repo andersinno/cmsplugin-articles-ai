@@ -1,0 +1,5 @@
+django-cms>=3.2
+django-enumfields>=0.8.0
+django-filer>=1.2.4
+djangocms_text_ckeditor>=3.0.0
+easy-thumbnails>=2.3
