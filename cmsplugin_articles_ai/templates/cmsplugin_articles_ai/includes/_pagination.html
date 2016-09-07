@@ -1,0 +1,47 @@
+<ul class="pagination">
+    {# To the beginning button #}
+    {% if paginator.num_pages > 1 and page_obj.number != 1 %}
+        <li>
+            <a href="?page=1">
+                &laquo;
+            </a>
+        </li>
+    {% endif %}
+
+    {# Previous button #}
+    {% if page_obj.has_previous %}
+        <li>
+            <a href="?page={{ page_obj.previous_page_number }}">
+                &lsaquo;
+            </a>
+        </li>
+    {% endif %}
+
+    {% for page in paginator.page_range %}
+        {% if page > page_obj.number|add:"-3" and page < page_obj.number|add:"3" %}
+            <li {% if page_obj.number == page %}class="active"{% endif %}>
+                <a href="?page={{ page }}">{{ page }}</a>
+            </li>
+        {% elif page == page_obj.number|add:"-3" or page == page_obj.number|add:"3" %}
+            <li class="disabled">
+                <span>...</span>
+            </li>
+        {% endif %}
+    {% endfor %}
+
+    {# Next button #}
+    {% if page_obj.has_next %}
+        <li>
+            <a href="?page={{ page_obj.next_page_number }}">&rsaquo;</a>
+        </li>
+    {% endif %}
+
+    {# To the end button #}
+    {% if paginator.num_pages > 1 and page_obj.number != paginator.num_pages %}
+        <li>
+            <a href="?page={{ paginator.num_pages }}">
+                &raquo;
+            </a>
+        </li>
+    {% endif %}
+</ul>

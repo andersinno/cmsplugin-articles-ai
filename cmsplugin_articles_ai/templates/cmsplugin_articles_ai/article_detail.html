@@ -1,0 +1,30 @@
+{% extends "cmsplugin_articles_ai/base.html" %}
+{% load thumbnail %}
+
+{% block content %}
+
+    <h2>{{ article.title }}</h2>
+
+    <hr>
+
+    {{ article.author.get_full_name }}
+    {{ article.created_at }}
+
+    <hr>
+
+    {% if article.main_image %}
+        <a href="{{ article.main_image.url }}">
+            <img
+                src="{% thumbnail article.main_image 300x150 crop %}"
+                alt="{{ article.main_image.filename }}"
+                style="width: 100%;"
+                class="img-rounded"
+            />
+        </a>
+    {% endif %}
+
+    <p>
+        {{ article.main_content }}
+    </p>
+
+{% endblock content %}

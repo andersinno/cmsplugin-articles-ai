@@ -1,0 +1,20 @@
+{% extends "cmsplugin_articles_ai/base.html" %}
+
+{% block page_title %}
+    {{ page_title }}
+{% endblock page_title %}
+
+{% block content %}
+    <div class="row">
+        <div class="col-md-9">
+            <h2>{{ page_title }}</h2>
+
+            {% include "cmsplugin_articles_ai/paginated_article_list.html" %}
+        </div>
+
+        <div class="col-md-3">
+            <h3>{{ page_title }}</h3>
+            {% include "cmsplugin_articles_ai/tag_list.html" with tags=all_tags %}
+        </div>
+    </div>
+{% endblock content %}

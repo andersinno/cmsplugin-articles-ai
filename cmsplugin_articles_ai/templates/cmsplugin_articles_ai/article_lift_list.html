@@ -1,0 +1,5 @@
+{% for article in articles.all %}
+    {% include "cmsplugin_articles_ai/article_lift.html" %}
+{% empty %}
+    No articles
+{% endfor %}

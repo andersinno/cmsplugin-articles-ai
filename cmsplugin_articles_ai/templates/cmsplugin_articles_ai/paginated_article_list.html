@@ -1,0 +1,12 @@
+<div class="article-list">
+    {% for article in articles.all %}
+        {% include "cmsplugin_articles_ai/article_list_element.html" %}
+        <hr>
+    {% empty %}
+        No articles
+    {% endfor %}
+</div>
+
+<div class="pagination">
+    {% include "cmsplugin_articles_ai/includes/_pagination.html" %}
+</div>

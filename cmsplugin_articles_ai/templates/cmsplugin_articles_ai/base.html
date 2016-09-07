@@ -1,0 +1,24 @@
+{% load cms_tags %}<!doctype html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Django CMS articles app</title>
+
+    <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+</head>
+<body>
+    <div class="well">
+        <div class="container">
+            <h1>Django CMS - articles app</h1>
+            <p class="lead">You are looking at reference templates of cmsplugin_articles_ai</p>
+            <p>Your task is to override these templates with your project specific versions. These templates can be used to check that the installation works and as a reference for your own templates. Place your own templates into <code>templates/cmsplugin_articles_ai/...</code> to override these.</p>
+
+            <a href="{% url 'articles' %}" class="btn btn-link">All articles</a>
+        </div>
+    </div>
+
+    <div class="container">
+        {% block content %}{% endblock content %}
+    </div>
+</body>
+</html>
