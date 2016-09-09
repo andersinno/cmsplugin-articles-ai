@@ -4,9 +4,9 @@ from cms.api import add_plugin
 from cms.models import Placeholder
 from django.core.urlresolvers import reverse
 
-from ..cms_plugins import ArticleList, TagFilterArticleList, TagList
-from ..factories import NotPublicArticleFactory, PublicArticleFactory, TagFactory
-from ..models import Tag, TagFilterMode
+from cmsplugin_articles_ai.cms_plugins import ArticleList, TagFilterArticleList, TagList
+from cmsplugin_articles_ai.factories import NotPublicArticleFactory, PublicArticleFactory, TagFactory
+from cmsplugin_articles_ai.models import Tag, TagFilterMode
 
 
 def create_articles(amount):

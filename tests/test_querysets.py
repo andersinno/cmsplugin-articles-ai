@@ -4,8 +4,8 @@ from datetime import timedelta
 import pytest
 from django.utils import timezone
 
-from ..factories import ArticleFactory, TagFactory
-from ..models import Article
+from cmsplugin_articles_ai.factories import ArticleFactory, TagFactory
+from cmsplugin_articles_ai.models import Article
 
 
 def create_articles(amount):
