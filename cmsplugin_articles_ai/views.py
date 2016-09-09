@@ -5,7 +5,7 @@ from django.conf import settings
 from django.utils.translation import ugettext_lazy as _
 from django.views.generic import DetailView, ListView
 
-from .models import Article, TagFilterMode, Tag
+from .models import Article, Tag, TagFilterMode
 
 
 class ArticleView(DetailView):

@@ -1,8 +1,7 @@
 # -*- coding: utf-8 -*-
 from django.conf.urls import url
 
-from .views import ArticleView, ArticleListView, TagFilteredArticleView
-
+from .views import ArticleListView, ArticleView, TagFilteredArticleView
 
 urlpatterns = [
     url(r'^tag/(?P<tag>[-_\w]+)/', TagFilteredArticleView.as_view(), name="tagged_articles"),

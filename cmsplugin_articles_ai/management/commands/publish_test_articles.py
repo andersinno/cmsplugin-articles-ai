@@ -1,9 +1,8 @@
 # -*- coding: utf-8 -*-
+from cmsplugin_articles_ai.factories import TaggedArticleFactory
 from django.conf import settings
 from django.core.management.base import BaseCommand
 from django.utils import translation
-
-from cmsplugin_articles_ai.factories import TaggedArticleFactory
 
 
 class Command(BaseCommand):

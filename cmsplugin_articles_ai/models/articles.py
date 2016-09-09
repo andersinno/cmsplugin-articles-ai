@@ -7,10 +7,9 @@ from django.utils import timezone
 from django.utils.encoding import python_2_unicode_compatible
 from django.utils.translation import ugettext_lazy as _
 from djangocms_text_ckeditor.fields import HTMLField
+from enumfields import Enum, EnumIntegerField
 from filer.fields.file import FilerFileField
 from filer.fields.image import FilerImageField
-from enumfields import Enum
-from enumfields import EnumIntegerField
 
 from .plugin_models import TagFilterMode
 from .tags import Tag

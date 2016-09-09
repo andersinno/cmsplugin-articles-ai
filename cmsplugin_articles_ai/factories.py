@@ -1,10 +1,9 @@
 # -*- coding: utf-8 -*-
-import factory
 import random
 import string
-
 from datetime import timedelta
 
+import factory
 from django.contrib.auth import get_user_model
 from django.utils import timezone
 from django.utils.text import slugify

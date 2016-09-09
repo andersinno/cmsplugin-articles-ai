@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
-import pytest
 from datetime import timedelta
 
+import pytest
 from django.utils import timezone
 
 from ..factories import ArticleFactory, TagFactory
