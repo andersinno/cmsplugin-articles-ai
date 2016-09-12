@@ -1,0 +1,28 @@
+{% load thumbnail %}
+
+<div class="media">
+    <div class="media-body">
+        <h3>
+            <a href="{{ article.get_absolute_url }}">{{ article.title }}</a>
+        </h3>
+
+        <p class="article-lift-summary">
+            {{ article.main_content|truncatechars:300 }}></a>
+        </p>
+
+        {% include "cmsplugin_articles_ai/tag_list.html" with tags=article.tags.all %}
+
+        <div>
+            {{ article.created_at }}
+            {{ article.author.get_full_name }}
+        </div>
+    </div>
+
+    <div class="media-right media-middle">
+        <img
+            src="{% thumbnail article.main_image 64x64 crop %}"
+            alt="{{ article.main_image.filename }}"
+            class="media-object img-thumbnail"
+        />
+    </div>
+</div>

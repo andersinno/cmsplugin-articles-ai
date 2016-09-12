@@ -1,0 +1,7 @@
+autoflake
+autopep8
+factory-boy
+flake8
+isort
+pytest
+pytest-django
