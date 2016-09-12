@@ -11,6 +11,7 @@ class Command(BaseCommand):
 
     def add_arguments(self, parser):
         parser.add_argument(
+            "-l",
             "--lang",
             action="store",
             dest="language",
@@ -18,14 +19,21 @@ class Command(BaseCommand):
             help="Language to be used."
         )
         parser.add_argument(
-            "--amount",
+            "-n",
+            "--number",
             action="store",
             dest="number_of_articles",
             default=15,
-            help="Amount of articles to be created."
+            help="Number of articles to be created."
         )
 
     def handle(self, *args, **options):
+        try:
+            from cmsplugin_articles_ai.factories import TaggedArticleFactory
+        except ImportError as e:
+            self.stderr.write("Factories could not be imported. Please see README.")
+            raise
+
         language = options["language"]
         number_of_articles = int(options["number_of_articles"])
 
