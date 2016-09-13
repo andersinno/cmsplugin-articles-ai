@@ -4,6 +4,7 @@ from django.db import models
 from django.utils.http import urlencode
 from django.utils.translation import ugettext_lazy as _
 from enumfields import Enum, EnumIntegerField
+from softchoice.fields.language import LanguageField
 
 from .tags import Tag
 
@@ -47,6 +48,15 @@ class ArticleListPlugin(CMSPlugin):
     article_amount = models.PositiveSmallIntegerField(
         default=5,
         verbose_name=_("amount of articles"),
+    )
+    language_filter = LanguageField(
+        verbose_name=_("language filter"),
+        default="",
+        blank=True,
+        help_text=_(
+            "Select a language if you want to list only articles written in specific"
+            "language. If you don't select a language, the listing includes all languages."
+        )
     )
 
     def __str__(self):

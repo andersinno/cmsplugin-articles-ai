@@ -63,6 +63,21 @@ def test_article_list_view_tag_filtering(settings, client):
 
 @pytest.mark.urls("cmsplugin_articles_ai.article_urls")
 @pytest.mark.django_db
+def test_article_list_view_lang_filtering(settings, client):
+    """
+    Test article list view can be filtered by passing lang as url parameter.
+    """
+    article_en = PublicArticleFactory(language="en")
+    article_fi = PublicArticleFactory(language="fi")
+
+    url = "%s?lang=en" % reverse("articles")
+    response = client.get(url)
+    assert article_en in response.context["articles"]
+    assert article_fi not in response.context["articles"]
+
+
+@pytest.mark.urls("cmsplugin_articles_ai.article_urls")
+@pytest.mark.django_db
 def test_tag_filtered_article_list_view(admin_client):
     """
     Test tag filtered article view accepts tags and filter mode

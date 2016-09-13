@@ -16,12 +16,19 @@ class ArticleAttachmentInline(admin.StackedInline):
 
 
 class ArticleAdmin(PlaceholderAdminMixin, admin.ModelAdmin):
-    list_display = ("title", "author", "slug", "published_from", "published_until",)
+    list_display = (
+        "title",
+        "slug",
+        "language",
+        "author",
+        "published_from",
+        "published_until",
+    )
     prepopulated_fields = {
         "slug": ("title",),
     }
     filter_horizontal = ["tags"]
-    list_filter = ["tags"]
+    list_filter = ["language", "tags"]
     inlines = [ArticleAttachmentInline]
 
     def get_form(self, request, obj=None, **kwargs):

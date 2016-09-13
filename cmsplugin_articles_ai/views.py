@@ -37,7 +37,9 @@ class ArticleView(DetailView):
 class ArticleListView(ListView):
     """
     View for listing all public articles or a list of public articles
-    per tag. Lists are paginated according to settings value.
+    per tag. By default the list is language agnostic, but you can pass
+    optional language parameter to get a filtered list.
+    Lists are paginated according to settings value.
     """
     context_object_name = "articles"
     paginate_by = getattr(settings, "ARTICLES_PER_PAGE", 10)
@@ -46,10 +48,11 @@ class ArticleListView(ListView):
 
     def get(self, request, *args, **kwargs):
         self.tag_filter = self.kwargs.get("tag", "")
+        self.lang_filter = request.GET.get("lang", "")
         return super(ArticleListView, self).get(request, *args, **kwargs)
 
     def get_queryset(self):
-        articles = Article.objects.public()
+        articles = Article.objects.public(language=self.lang_filter)
         if self.tag_filter:
             return articles.filter(tags__name=self.tag_filter)
         return articles
