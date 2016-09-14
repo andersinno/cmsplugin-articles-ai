@@ -12,10 +12,12 @@ class ArticleList(CMSPluginBase):
     module = _("Articles")
     name = _("List of latest articles")
     render_template = "cmsplugin_articles_ai/article_lift_list.html"
-    fields = ["article_amount"]
+    fields = ["article_amount", "language_filter"]
 
     def get_articles(self, plugin_conf):
-        return Article.objects.public()
+        return Article.objects.public(
+            language=plugin_conf.language_filter,
+        )
 
     def render(self, context, instance, placeholder):
         context.update({
@@ -30,7 +32,7 @@ class TagFilterArticleList(ArticleList):
     model = ArticleListPlugin
     name = _("Tag filtered article list")
     filter_horizontal = ["tags"]
-    fields = ["filter_mode", "tags", "article_amount"]
+    fields = ["filter_mode", "tags", "article_amount", "language_filter"]
 
     def get_articles(self, plugin_conf):
         articles = super(TagFilterArticleList, self).get_articles(plugin_conf)

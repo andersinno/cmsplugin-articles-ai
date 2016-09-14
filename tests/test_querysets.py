@@ -45,16 +45,25 @@ def test_article_is_public():
 def test_article_public_query():
     past = timezone.now() - timedelta(hours=1)
     future = timezone.now() + timedelta(hours=1)
-    published = ArticleFactory(published_from=past)
+    published_no_lang = ArticleFactory(published_from=past, language="")
+    published_fi = ArticleFactory(published_from=past, language="fi")
+    published_en = ArticleFactory(published_from=past, language="en")
     draft_1 = ArticleFactory(published_from=None)
     draft_2 = ArticleFactory(published_from=future)
     draft_3 = ArticleFactory(published_until=past)
 
     public = Article.objects.public()
-    assert published in public
+    assert published_no_lang in public
+    assert published_fi in public
+    assert published_en in public
     assert draft_1 not in public
     assert draft_2 not in public
     assert draft_3 not in public
+
+    public = Article.objects.public(language="en")
+    assert published_fi not in public
+    assert published_en in public
+    assert published_no_lang in public
 
 
 @pytest.mark.django_db

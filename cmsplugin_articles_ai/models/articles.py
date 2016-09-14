@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from django.conf import settings
 from django.contrib.auth.models import User
 from django.core.urlresolvers import reverse
 from django.db import models
@@ -10,6 +11,7 @@ from djangocms_text_ckeditor.fields import HTMLField
 from enumfields import Enum, EnumIntegerField
 from filer.fields.file import FilerFileField
 from filer.fields.image import FilerImageField
+from softchoice.fields.language import LanguageField
 
 from .plugin_models import TagFilterMode
 from .tags import Tag
@@ -38,12 +40,19 @@ def _get_tag_pks(tags):
 
 class ArticleQuerySet(models.QuerySet):
 
-    def public(self):
+    def public(self, language=None):
         """
-        Returns articles that are considered public.
+        Returns articles that are considered public with given language or
+        language agnostically if language isn't given.
+        :params language: Language code
+        :language type: Str
         """
         now = timezone.now()
-        return self.filter(Q(published_from__lte=now) & Q(Q(published_until__gte=now) | Q(published_until=None)))
+        articles = self.filter(Q(published_from__lte=now) & Q(Q(published_until__gte=now) | Q(published_until=None)))
+        if language:
+            # Articles with blank language should be considered language agnostic.
+            return articles.filter(Q(language=language) | Q(language=""))
+        return articles
 
     def tag_filter(self, filter_mode, tags):
         """
@@ -105,6 +114,15 @@ class Article(models.Model):
         max_length=200,
         verbose_name=_("URL slug"),
         db_index=True,
+    )
+    language = LanguageField(
+        verbose_name=_("language"),
+        default=settings.LANGUAGE_CODE,
+        blank=True,
+        help_text=_(
+            "Leave this empty if you want the article to be "
+            "shown regardless of any language filters."
+        )
     )
     published_from = models.DateTimeField(
         _("published from"), null=True, blank=True,

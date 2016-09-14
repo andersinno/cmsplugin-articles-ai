@@ -37,6 +37,28 @@ def test_article_list_plugin_article_count():
     assert len(context["articles"]) == 3
 
 
+@pytest.mark.django_db
+@pytest.mark.parametrize("language_filter", ["", "en", "fi"])
+def test_article_list_plugin_language_filter(language_filter):
+    """
+    Test article list plugin filters articles according to language filter
+    """
+    article_fi = PublicArticleFactory(language="fi")
+    article_en = PublicArticleFactory(language="en")
+    plugin = init_plugin(ArticleList, language_filter=language_filter)
+    plugin_instance = plugin.get_plugin_class_instance()
+    context = plugin_instance.render({}, plugin, None)
+    if language_filter == "en":
+        assert article_fi not in context["articles"]
+        assert article_en in context["articles"]
+    elif language_filter == "fi":
+        assert article_fi in context["articles"]
+        assert article_en not in context["articles"]
+    else:
+        assert article_fi in context["articles"]
+        assert article_en in context["articles"]
+
+
 @pytest.mark.urls("cmsplugin_articles_ai.article_urls")
 @pytest.mark.django_db
 @pytest.mark.parametrize("plugin_type", [
