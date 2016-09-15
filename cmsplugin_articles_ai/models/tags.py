@@ -27,6 +27,7 @@ class TagQuerySet(models.QuerySet):
 @python_2_unicode_compatible
 class Tag(models.Model):
     name = models.CharField(verbose_name=_("name"), max_length=200, unique=True)
+    slug = models.SlugField(verbose_name=_("slug"), max_length=200, unique=True)
     objects = TagQuerySet.as_manager()
 
     class Meta:
