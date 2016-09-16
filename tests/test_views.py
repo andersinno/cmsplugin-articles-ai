@@ -50,11 +50,11 @@ def test_article_list_view_tag_filtering(settings, client):
     Test article list view can be filtered by passing tag as url parameter.
     """
     news = TagFactory(name="news")
-    office = TagFactory(name="office")
+    home_office = TagFactory(name="home office")
     PublicArticleFactory(tags=[news])
-    office_article = PublicArticleFactory(tags=[office])
+    office_article = PublicArticleFactory(tags=[home_office])
 
-    url = reverse("tagged_articles", kwargs={"tag": office.name})
+    url = reverse("tagged_articles", kwargs={"tag": home_office.slug})
     response = client.get(url)
     assert len(response.context["articles"]) == 1
     assert response.context["articles"][0].pk == office_article.pk

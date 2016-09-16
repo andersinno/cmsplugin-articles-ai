@@ -33,6 +33,7 @@ class UserFactory(factory.django.DjangoModelFactory):
 
 class TagFactory(factory.django.DjangoModelFactory):
     name = fuzzy.FuzzyText(length=8, chars=string.ascii_letters)
+    slug = factory.LazyAttribute(lambda tag: slugify(tag.name))
 
     class Meta:
         model = Tag

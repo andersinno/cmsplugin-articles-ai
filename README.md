@@ -17,4 +17,3 @@ This CMS app provides a way to manage articles. You need to implement the fronte
 ## Installing for development
 
 Use `pip install -e /path/to/checkout` to install as "editable" package to your venv
-

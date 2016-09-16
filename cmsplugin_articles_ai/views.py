@@ -54,7 +54,7 @@ class ArticleListView(ListView):
     def get_queryset(self):
         articles = Article.objects.public(language=self.lang_filter)
         if self.tag_filter:
-            return articles.filter(tags__name=self.tag_filter)
+            return articles.filter(tags__slug=self.tag_filter)
         return articles
 
     def get_context_data(self, **kwargs):

@@ -6,7 +6,10 @@ from .models import Article, ArticleAttachment, Tag
 
 
 class TagAdmin(admin.ModelAdmin):
-    list_display = ("name",)
+    list_display = ("name", "slug",)
+    prepopulated_fields = {
+        "slug": ("name",),
+    }
 
 
 class ArticleAttachmentInline(admin.StackedInline):
