@@ -2,11 +2,10 @@
 import pytest
 from cms.api import add_plugin
 from cms.models import Placeholder
-from django.core.urlresolvers import reverse
-
 from cmsplugin_articles_ai.cms_plugins import ArticleList
 from cmsplugin_articles_ai.factories import NotPublicArticleFactory, PublicArticleFactory, TagFactory
 from cmsplugin_articles_ai.models import Tag, TagFilterMode
+from django.core.urlresolvers import reverse
 
 
 def create_articles(amount):

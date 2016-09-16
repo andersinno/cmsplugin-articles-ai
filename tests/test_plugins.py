@@ -2,11 +2,8 @@
 import pytest
 from cms.api import add_plugin
 from cms.models import Placeholder
-from django.core.urlresolvers import reverse
-
 from cmsplugin_articles_ai.cms_plugins import ArticleList, TagFilterArticleList, TagList
-from cmsplugin_articles_ai.factories import NotPublicArticleFactory, PublicArticleFactory, TagFactory
-from cmsplugin_articles_ai.models import Tag, TagFilterMode
+from cmsplugin_articles_ai.factories import PublicArticleFactory, TagFactory
 
 
 def create_articles(amount):
@@ -20,7 +17,7 @@ def init_plugin(plugin_type, lang="en", **plugin_data):
     Returns an instance of plugin_type
     """
     placeholder = Placeholder.objects.create(slot="test")
-    return add_plugin(placeholder, plugin_type, "en", **plugin_data)
+    return add_plugin(placeholder, plugin_type, lang, **plugin_data)
 
 
 @pytest.mark.django_db
@@ -61,16 +58,12 @@ def test_article_list_plugin_language_filter(language_filter):
 
 @pytest.mark.urls("cmsplugin_articles_ai.article_urls")
 @pytest.mark.django_db
-@pytest.mark.parametrize("plugin_type", [
-    ArticleList,
-    TagFilterArticleList,
-])
-def test_article_list_plugin_html(plugin_type):
+def test_article_list_plugin_html():
     """
     Test article list plugin rendering works and html has
     relevant content.
     """
-    plugin = init_plugin(plugin_type)
+    plugin = init_plugin(ArticleList)
     article = PublicArticleFactory()
     html = plugin.render_plugin({})
     assert article.title in html
@@ -78,7 +71,22 @@ def test_article_list_plugin_html(plugin_type):
 
 @pytest.mark.urls("cmsplugin_articles_ai.article_urls")
 @pytest.mark.django_db
-def test_article_list_plugin_html():
+def test_tag_article_list_plugin_html():
+    """
+    Test article list plugin rendering works and html has
+    relevant content.
+    """
+    tag = TagFactory()
+    article = PublicArticleFactory(tags=[tag])
+    plugin = init_plugin(TagFilterArticleList)
+    plugin.tags.add(tag)
+    html = plugin.render_plugin({})
+    assert article.title in html
+
+
+@pytest.mark.urls("cmsplugin_articles_ai.article_urls")
+@pytest.mark.django_db
+def test_tag_list_plugin_html():
     """
     Test tag list plugin rendering works and html has
     relevant content.
