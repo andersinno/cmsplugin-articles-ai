@@ -2,10 +2,9 @@
 from datetime import timedelta
 
 import pytest
-from django.utils import timezone
-
 from cmsplugin_articles_ai.factories import ArticleFactory, TagFactory
 from cmsplugin_articles_ai.models import Article
+from django.utils import timezone
 
 
 def create_articles(amount):

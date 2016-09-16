@@ -8,7 +8,6 @@ from softchoice.fields.language import LanguageField
 
 from .tags import Tag
 
-
 __all__ = (
     "ArticleListPlugin",
     "TagFilterMode",

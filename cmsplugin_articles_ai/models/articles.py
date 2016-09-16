@@ -16,7 +16,6 @@ from softchoice.fields.language import LanguageField
 from .plugin_models import TagFilterMode
 from .tags import Tag
 
-
 __all__ = (
     "Article",
     "ArticleAttachment",

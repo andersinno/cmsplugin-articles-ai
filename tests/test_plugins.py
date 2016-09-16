@@ -2,7 +2,6 @@
 import pytest
 from cms.api import add_plugin
 from cms.models import Placeholder
-
 from cmsplugin_articles_ai.cms_plugins import ArticleList, TagFilterArticleList, TagList
 from cmsplugin_articles_ai.factories import PublicArticleFactory, TagFactory
 
