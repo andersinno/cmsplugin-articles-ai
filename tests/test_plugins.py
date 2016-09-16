@@ -18,7 +18,7 @@ def init_plugin(plugin_type, lang="en", **plugin_data):
     Returns an instance of plugin_type
     """
     placeholder = Placeholder.objects.create(slot="test")
-    return add_plugin(placeholder, plugin_type, "en", **plugin_data)
+    return add_plugin(placeholder, plugin_type, lang, **plugin_data)
 
 
 @pytest.mark.django_db
