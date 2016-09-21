@@ -14,7 +14,9 @@ class ArticleView(DetailView):
     """
     model = Article
     template_name = "cmsplugin_articles_ai/article_detail.html"
-    queryset = Article.objects.public()
+
+    def get_queryset(self):
+        return Article.objects.public()
 
     def get_context_data(self, **kwargs):
         context = super(ArticleView, self).get_context_data(**kwargs)
