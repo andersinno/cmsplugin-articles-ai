@@ -2,6 +2,7 @@
 import pytest
 from cms.api import add_plugin
 from cms.models import Placeholder
+from cms.plugin_rendering import ContentRenderer
 from cmsplugin_articles_ai.cms_plugins import ArticleList, TagFilterArticleList, TagList
 from cmsplugin_articles_ai.factories import PublicArticleFactory, TagFactory
 
@@ -9,6 +10,14 @@ from cmsplugin_articles_ai.factories import PublicArticleFactory, TagFactory
 def create_articles(amount):
     for _ in range(amount):
         PublicArticleFactory()
+
+
+def init_content_renderer(request=None):
+    """
+    Create and return `ContentRenderer` instance initiated with request.
+    Request may be `None` in some cases.
+    """
+    return ContentRenderer(request)
 
 
 def init_plugin(plugin_type, lang="en", **plugin_data):
@@ -65,7 +74,8 @@ def test_article_list_plugin_html():
     """
     plugin = init_plugin(ArticleList)
     article = PublicArticleFactory()
-    html = plugin.render_plugin({})
+    renderer = init_content_renderer()
+    html = renderer.render_plugin(instance=plugin, context={}, placeholder=plugin.placeholder)
     assert article.title in html
 
 
@@ -80,7 +90,8 @@ def test_tag_article_list_plugin_html():
     article = PublicArticleFactory(tags=[tag])
     plugin = init_plugin(TagFilterArticleList)
     plugin.tags.add(tag)
-    html = plugin.render_plugin({})
+    renderer = init_content_renderer()
+    html = renderer.render_plugin(instance=plugin, context={}, placeholder=plugin.placeholder)
     assert article.title in html
 
 
@@ -93,5 +104,6 @@ def test_tag_list_plugin_html():
     """
     plugin = init_plugin(TagList)
     tag = TagFactory()
-    html = plugin.render_plugin({})
+    renderer = init_content_renderer()
+    html = renderer.render_plugin(instance=plugin, context={}, placeholder=plugin.placeholder)
     assert tag.name in html
