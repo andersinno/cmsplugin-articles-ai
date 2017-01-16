@@ -16,7 +16,7 @@ setup(
     long_description=open('README.md').read(),
     description='Articles management app for Django CMS',
     install_requires=[
-        'django-cms>=3.2,<3.4',
+        'django-cms>=3.2,<3.5',
         'django-enumfields>=0.8.0',
         'django-filer>=1.2.4',
         'django-soft-choice-fields>=0.3.1',
