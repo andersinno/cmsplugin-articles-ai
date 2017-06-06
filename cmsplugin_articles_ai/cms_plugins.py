@@ -3,6 +3,7 @@ from cms.models import CMSPlugin
 from cms.plugin_base import CMSPluginBase
 from cms.plugin_pool import plugin_pool
 from django.utils.translation import ugettext_lazy as _
+from publisher.middleware import get_draft_status
 
 from .models import Article, ArticleListPlugin, Tag
 
@@ -17,7 +18,7 @@ class ArticleList(CMSPluginBase):
     def get_articles(self, plugin_conf):
         return Article.objects.public(
             language=plugin_conf.language_filter,
-        )
+        ).filter(publisher_is_draft=get_draft_status())
 
     def render(self, context, instance, placeholder):
         context.update({

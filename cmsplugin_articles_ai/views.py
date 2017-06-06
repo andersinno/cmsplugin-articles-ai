@@ -1,14 +1,13 @@
 # -*- coding: utf-8 -*-
-import json
 
 from django.conf import settings
 from django.utils.translation import ugettext_lazy as _
-from django.views.generic import DetailView, ListView
+from publisher.views import PublisherDetailView, PublisherListView
 
 from .models import Article, Tag, TagFilterMode
 
 
-class ArticleView(DetailView):
+class ArticleView(PublisherDetailView):
     """
     View for displaying single article.
     """
@@ -16,7 +15,8 @@ class ArticleView(DetailView):
     template_name = "cmsplugin_articles_ai/article_detail.html"
 
     def get_queryset(self):
-        return Article.objects.public()
+        articles = super(ArticleView, self).get_queryset()
+        return articles.public()
 
     def get_context_data(self, **kwargs):
         context = super(ArticleView, self).get_context_data(**kwargs)
@@ -36,13 +36,14 @@ class ArticleView(DetailView):
         return context
 
 
-class ArticleListView(ListView):
+class ArticleListView(PublisherListView):
     """
     View for listing all public articles or a list of public articles
     per tag. By default the list is language agnostic, but you can pass
     optional language parameter to get a filtered list.
     Lists are paginated according to settings value.
     """
+    model = Article
     context_object_name = "articles"
     paginate_by = getattr(settings, "ARTICLES_PER_PAGE", 10)
     tag_filter = ""
@@ -54,7 +55,8 @@ class ArticleListView(ListView):
         return super(ArticleListView, self).get(request, *args, **kwargs)
 
     def get_queryset(self):
-        articles = Article.objects.public(language=self.lang_filter)
+        articles = super(ArticleListView, self).get_queryset()
+        articles = articles.public(language=self.lang_filter)
         if self.tag_filter:
             return articles.filter(tags__slug=self.tag_filter)
         return articles

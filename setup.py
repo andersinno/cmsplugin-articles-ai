@@ -22,6 +22,7 @@ setup(
         'django-soft-choice-fields>=0.3.1',
         'djangocms_text_ckeditor>=3.0.0',
         'easy-thumbnails>=2.3',
+        'django-model-publisher-ai>=0.3.1',
     ],
     extras_require=({
         'utils': ['factory-boy>=0.6.0'],

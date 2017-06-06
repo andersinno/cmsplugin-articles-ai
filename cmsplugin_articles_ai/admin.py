@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
-from cms.admin.placeholderadmin import PlaceholderAdminMixin
 from django.contrib import admin
+from publisher.admin import PublisherAdmin, PublisherPublishedFilter
 
 from .models import Article, ArticleAttachment, Tag
 
@@ -18,7 +18,7 @@ class ArticleAttachmentInline(admin.StackedInline):
     fields = ["name", "attachment_file"]
 
 
-class ArticleAdmin(PlaceholderAdminMixin, admin.ModelAdmin):
+class ArticleAdmin(PublisherAdmin):
     list_display = (
         "title",
         "slug",
@@ -26,12 +26,14 @@ class ArticleAdmin(PlaceholderAdminMixin, admin.ModelAdmin):
         "author",
         "published_from",
         "published_until",
+        'publisher_publish',
+        'publisher_status'
     )
     prepopulated_fields = {
         "slug": ("title",),
     }
     filter_horizontal = ["tags"]
-    list_filter = ["language", "tags"]
+    list_filter = ["language", "tags", PublisherPublishedFilter]
     inlines = [ArticleAttachmentInline]
 
     def get_form(self, request, obj=None, **kwargs):
