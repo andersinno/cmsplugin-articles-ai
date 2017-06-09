@@ -5,6 +5,8 @@ from cms.models import Placeholder
 from cms.plugin_rendering import ContentRenderer
 from cmsplugin_articles_ai.cms_plugins import ArticleList, TagFilterArticleList, TagList
 from cmsplugin_articles_ai.factories import PublicArticleFactory, TagFactory
+from cmsplugin_articles_ai.models import Article
+from tests.test_views import publish_articles_with_publisher
 
 
 def create_articles(amount):
@@ -37,6 +39,7 @@ def test_article_list_plugin_article_count():
     """
     article_count = 10
     create_articles(article_count)
+    publish_articles_with_publisher(Article.objects.all())
     plugin = init_plugin(ArticleList, article_amount=3)
     plugin_instance = plugin.get_plugin_class_instance()
     context = plugin_instance.render({}, plugin, None)
@@ -51,18 +54,22 @@ def test_article_list_plugin_language_filter(language_filter):
     """
     article_fi = PublicArticleFactory(language="fi")
     article_en = PublicArticleFactory(language="en")
+    publish_articles_with_publisher(Article.objects.all())
+    published_article_fi = Article.publisher_manager.published().get(language="fi")
+    published_article_en = Article.publisher_manager.published().get(language="en")
+
     plugin = init_plugin(ArticleList, language_filter=language_filter)
     plugin_instance = plugin.get_plugin_class_instance()
     context = plugin_instance.render({}, plugin, None)
     if language_filter == "en":
-        assert article_fi not in context["articles"]
-        assert article_en in context["articles"]
+        assert published_article_fi not in context["articles"]
+        assert published_article_en in context["articles"]
     elif language_filter == "fi":
-        assert article_fi in context["articles"]
-        assert article_en not in context["articles"]
+        assert published_article_fi in context["articles"]
+        assert published_article_en not in context["articles"]
     else:
-        assert article_fi in context["articles"]
-        assert article_en in context["articles"]
+        assert published_article_fi in context["articles"]
+        assert published_article_en in context["articles"]
 
 
 @pytest.mark.urls("cmsplugin_articles_ai.article_urls")
@@ -74,9 +81,11 @@ def test_article_list_plugin_html():
     """
     plugin = init_plugin(ArticleList)
     article = PublicArticleFactory()
+    publish_articles_with_publisher([article])
+    published_article = Article.publisher_manager.published().first()
     renderer = init_content_renderer()
     html = renderer.render_plugin(instance=plugin, context={}, placeholder=plugin.placeholder)
-    assert article.title in html
+    assert published_article.title in html
 
 
 @pytest.mark.urls("cmsplugin_articles_ai.article_urls")
@@ -87,12 +96,14 @@ def test_tag_article_list_plugin_html():
     relevant content.
     """
     tag = TagFactory()
-    article = PublicArticleFactory(tags=[tag])
+    article = PublicArticleFactory(title="article1", tags=[tag])
+    publish_articles_with_publisher([article])
+    published_article = Article.publisher_manager.published().first()
     plugin = init_plugin(TagFilterArticleList)
     plugin.tags.add(tag)
     renderer = init_content_renderer()
     html = renderer.render_plugin(instance=plugin, context={}, placeholder=plugin.placeholder)
-    assert article.title in html
+    assert published_article.title in html
 
 
 @pytest.mark.urls("cmsplugin_articles_ai.article_urls")
