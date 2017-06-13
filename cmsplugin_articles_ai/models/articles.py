@@ -8,9 +8,9 @@ from django.utils import timezone
 from django.utils.encoding import python_2_unicode_compatible
 from django.utils.translation import ugettext_lazy as _
 from djangocms_text_ckeditor.fields import HTMLField
-from enumfields import Enum, EnumIntegerField
 from filer.fields.file import FilerFileField
 from filer.fields.image import FilerImageField
+from publisher.models import PublisherModel
 from softchoice.fields.language import LanguageField
 
 from .plugin_models import TagFilterMode
@@ -107,7 +107,7 @@ class ArticleQuerySet(models.QuerySet):
 
 
 @python_2_unicode_compatible
-class Article(models.Model):
+class Article(PublisherModel):
     title = models.CharField(verbose_name=_("title"), max_length=200)
     slug = models.SlugField(
         max_length=200,
@@ -186,6 +186,20 @@ class Article(models.Model):
         been hooked to any CMS page.
         """
         return reverse("article", kwargs={"slug": self.slug})
+
+    def clone_relations(self, src_obj, dst_obj):
+        """
+        Implements cloning relations from article to another
+
+        :param src_obj: Article object where the relations are copied from
+        :param dst_obj: Article object where the relations are copied to
+        """
+        dst_obj.tags = src_obj.tags.all()
+
+        for attachment in src_obj.attachments.all():
+            attachment.pk = None
+            attachment.article = dst_obj
+            attachment.save()
 
 
 class ArticleQuerySet(models.QuerySet):
