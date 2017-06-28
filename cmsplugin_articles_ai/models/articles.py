@@ -145,8 +145,8 @@ class Article(PublisherModel):
         blank=True,
         on_delete=models.SET_NULL,
     )
+    lead_paragraph = HTMLField(verbose_name=_("lead paragraph"), blank=True)
     main_content = HTMLField(verbose_name=_("content"))
-
     created_at = models.DateTimeField(
         _("creation time"), auto_now_add=True, editable=False,
     )
@@ -156,7 +156,7 @@ class Article(PublisherModel):
 
     objects = ArticleQuerySet.as_manager()
 
-    class Meta:
+    class Meta(PublisherModel.Meta):
         verbose_name = _("article")
         verbose_name_plural = _("articles")
         ordering = ('-published_from', '-pk')
