@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 from django.conf import settings
-from django.contrib.auth.models import User
 from django.core.urlresolvers import reverse
 from django.db import models
 from django.db.models import Count, Q
@@ -133,7 +132,7 @@ class Article(PublisherModel):
         _("highlight"), default=False, help_text=_("Highlight as important."),
     )
     author = models.ForeignKey(
-        User, verbose_name=_("author"), on_delete=models.PROTECT,
+        settings.AUTH_USER_MODEL, verbose_name=_("author"), on_delete=models.PROTECT,
     )
     tags = models.ManyToManyField(
         Tag, verbose_name=_("tags"), related_name="articles", blank=True,
@@ -218,7 +217,8 @@ class ArticleAttachment(models.Model):
         on_delete=models.SET(""),
     )
     article = models.ForeignKey(
-        Article, verbose_name=_("article"),
+        Article,
+        verbose_name=_("article"),
         related_name="attachments",
     )
     is_image = models.BooleanField(
