@@ -2,7 +2,7 @@
 #      .--.
 #       /    \
 #      ## a  a       _
-#      (   '._)     |_|
+#      (   '._)    c|_|
 #       |'-- |      | |
 #     _.\___/_   ___|_|___
 #   ."\> \Y/|<'.  '._.-'
@@ -18,3 +18,5 @@
 #       /  | |
 #      |___\_.\_
 #      `-"--'---'
+
+default_app_config = 'cmsplugin_articles_ai.apps.ArticlesAppConfig'
