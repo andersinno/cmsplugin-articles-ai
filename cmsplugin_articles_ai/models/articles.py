@@ -202,7 +202,7 @@ class Article(PublisherModel):
             attachment.save()
 
 
-class ArticleQuerySet(models.QuerySet):
+class ArticleAttachmentQuerySet(models.QuerySet):
 
     def images(self):
         return self.filter(is_image=True)
@@ -227,7 +227,7 @@ class ArticleAttachment(models.Model):
         db_index=True
     )
 
-    objects = ArticleQuerySet.as_manager()
+    objects = ArticleAttachmentQuerySet.as_manager()
 
     class Meta:
         verbose_name = _("article attachment")
