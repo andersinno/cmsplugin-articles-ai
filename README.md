@@ -9,7 +9,7 @@ This CMS app provides a way to manage articles. You need to implement the fronte
 1. Install with pip: `pip install cmsplugin-articles-ai`
     - Note that if you want to use factories and management for generating test data, you need to install optional requirements too. You can do that either by manually
     installing them by running `pip install cmsplugin-articles-ai[utils]`
-2. Add `'cmsplugin_articles_ai'` and `'publisher'` to `INSTALLED_APPS`
+2. Add `'cmsplugin_articles_ai.apps.ArticlesAppConfig'` and `'publisher'` to `INSTALLED_APPS`. `publisher` is only needed if you use draft/public features.
 3. Add `'publisher.middleware.PublisherMiddleware'` to `MIDDLEWARE_CLASSES`
 4. Implement frontend
     - This package includes only reference templates in (`templates/cmsplugin-articles-ai/`).

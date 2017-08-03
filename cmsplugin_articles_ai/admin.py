@@ -2,7 +2,8 @@
 from django.contrib import admin
 from publisher.admin import PublisherAdmin, PublisherPublishedFilter
 
-from .models import Article, ArticleAttachment, Tag
+from .models import ArticleAttachment, Tag
+from .utils.models import get_article_model
 
 
 class TagAdmin(admin.ModelAdmin):
@@ -43,4 +44,4 @@ class ArticleAdmin(PublisherAdmin):
 
 
 admin.site.register(Tag, TagAdmin)
-admin.site.register(Article, ArticleAdmin)
+admin.site.register(get_article_model(), ArticleAdmin)

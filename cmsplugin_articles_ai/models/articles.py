@@ -12,10 +12,13 @@ from filer.fields.image import FilerImageField
 from publisher.models import PublisherModel
 from softchoice.fields.language import LanguageField
 
+from cmsplugin_articles_ai import settings as app_settings
+
 from .plugin_models import TagFilterMode
 from .tags import Tag
 
 __all__ = (
+    "AbstractBaseArticle",
     "Article",
     "ArticleAttachment",
     "ArticleQuerySet",
@@ -105,8 +108,7 @@ class ArticleQuerySet(models.QuerySet):
         return self.filter(tags__in=tag_pks).distinct()
 
 
-@python_2_unicode_compatible
-class Article(PublisherModel):
+class AbstractBaseArticle(PublisherModel):
     title = models.CharField(verbose_name=_("title"), max_length=200)
     slug = models.SlugField(
         max_length=200,
@@ -128,14 +130,33 @@ class Article(PublisherModel):
     published_until = models.DateTimeField(
         _("published until"), null=True, blank=True,
     )
-    highlight = models.BooleanField(
-        _("highlight"), default=False, help_text=_("Highlight as important."),
-    )
     author = models.ForeignKey(
-        settings.AUTH_USER_MODEL, verbose_name=_("author"), on_delete=models.PROTECT,
+        settings.AUTH_USER_MODEL,
+        verbose_name=_("author"),
+        on_delete=models.PROTECT,
     )
     tags = models.ManyToManyField(
-        Tag, verbose_name=_("tags"), related_name="articles", blank=True,
+        Tag,
+        blank=True,
+        related_name="%(class)ss",
+        verbose_name=_("tags"),
+    )
+    created_at = models.DateTimeField(
+        _("creation time"), auto_now_add=True, editable=False,
+    )
+    modified_at = models.DateTimeField(
+        _("last modified"), auto_now=True, editable=False,
+    )
+
+    class Meta(PublisherModel.Meta):
+        abstract = True
+        ordering = ('-published_from', '-pk')
+
+
+@python_2_unicode_compatible
+class Article(AbstractBaseArticle):
+    highlight = models.BooleanField(
+        _("highlight"), default=False, help_text=_("Highlight as important."),
     )
     main_image = FilerImageField(
         verbose_name=_("main image"),
@@ -146,19 +167,12 @@ class Article(PublisherModel):
     )
     lead_paragraph = HTMLField(verbose_name=_("lead paragraph"), blank=True)
     main_content = HTMLField(verbose_name=_("content"))
-    created_at = models.DateTimeField(
-        _("creation time"), auto_now_add=True, editable=False,
-    )
-    modified_at = models.DateTimeField(
-        _("last modified"), auto_now=True, editable=False,
-    )
 
     objects = ArticleQuerySet.as_manager()
 
-    class Meta(PublisherModel.Meta):
+    class Meta(AbstractBaseArticle.Meta):
         verbose_name = _("article")
         verbose_name_plural = _("articles")
-        ordering = ('-published_from', '-pk')
 
     def __str__(self):
         return self.title
@@ -217,7 +231,7 @@ class ArticleAttachment(models.Model):
         on_delete=models.SET(""),
     )
     article = models.ForeignKey(
-        Article,
+        app_settings.ARTICLES_ARTICLE_MODEL,
         verbose_name=_("article"),
         related_name="attachments",
     )
