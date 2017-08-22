@@ -1,7 +1,10 @@
 # -*- coding: utf-8 -*-
 import pytest
 
-from cmsplugin_articles_ai.factories import NotPublicArticleFactory, PublicArticleFactory, TagFactory
+from cmsplugin_articles_ai.factories import (
+    CategoryFactory, NotPublicArticleFactory, PublicArticleFactory,
+    TagFactory
+)
 from cmsplugin_articles_ai.models import Article, Tag, TagFilterMode
 from django.core.urlresolvers import reverse
 
@@ -127,5 +130,30 @@ def test_tag_filtered_article_list_view(admin_client):
     )
     response = admin_client.get(url)
     articles = response.context["articles"]
+    assert published_article1 in articles
+    assert published_article2 not in articles
+
+
+@pytest.mark.urls("cmsplugin_articles_ai.article_urls")
+@pytest.mark.django_db
+def test_category_detail_view(client):
+    """
+    Test category detail view article list.
+    """
+    category = CategoryFactory()
+    article1 = PublicArticleFactory(category=category)
+    article2 = PublicArticleFactory(category=None)
+    publish_articles_with_publisher(Article.objects.all())
+
+    # Double check that article categories are set up correctly.
+    assert category == article1.category
+    assert not article2.category
+
+    published_article1 = Article.publisher_manager.published().get(title=article1.title)
+    published_article2 = Article.publisher_manager.published().get(title=article2.title)
+
+    response = client.get(category.get_absolute_url())
+    articles = response.context["articles"]
+    assert len(articles) == 1
     assert published_article1 in articles
     assert published_article2 not in articles

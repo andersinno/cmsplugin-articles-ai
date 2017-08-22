@@ -29,6 +29,15 @@ class ArticleList(CMSPluginBase):
         return context
 
 
+class CategoryLiftPlugin(ArticleList):
+    name = _("List of latest articles in category")
+    fields = ["article_amount", "category", "language_filter"]
+
+    def get_articles(self, plugin_conf):
+        articles = super(CategoryLiftPlugin, self).get_articles(plugin_conf)
+        return articles.filter(category=plugin_conf.category)
+
+
 class TagFilterArticleList(ArticleList):
     model = ArticleListPlugin
     name = _("Tag filtered article list")
@@ -52,5 +61,6 @@ class TagList(CMSPluginBase):
 
 
 plugin_pool.register_plugin(ArticleList)
+plugin_pool.register_plugin(CategoryLiftPlugin)
 plugin_pool.register_plugin(TagFilterArticleList)
 plugin_pool.register_plugin(TagList)

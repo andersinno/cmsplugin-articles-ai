@@ -6,6 +6,7 @@ from django.utils.translation import ugettext_lazy as _
 from enumfields import Enum, EnumIntegerField
 from softchoice.fields.language import LanguageField
 
+from .categories import Category
 from .tags import Tag
 
 __all__ = (
@@ -38,6 +39,13 @@ class ArticleListPlugin(CMSPlugin):
         TagFilterMode,
         verbose_name=_(u"filter"),
         default=TagFilterMode.ANY,
+    )
+    category = models.ForeignKey(
+        Category,
+        verbose_name=_("category"),
+        blank=True,
+        null=True,
+        related_name="+",
     )
     tags = models.ManyToManyField(
         Tag,

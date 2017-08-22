@@ -13,7 +13,10 @@
         </div>
 
         <div class="col-md-3">
-            <h3>{{ page_title }}</h3>
+            <h3>Categories</h3>
+            {% include "cmsplugin_articles_ai/category_list.html" with categories=all_categories %}
+
+            <h3>Tags</h3>
             {% include "cmsplugin_articles_ai/tag_list.html" with tags=all_tags %}
         </div>
     </div>

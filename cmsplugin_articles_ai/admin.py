@@ -2,7 +2,7 @@
 from django.contrib import admin
 from publisher.admin import PublisherAdmin, PublisherPublishedFilter
 
-from .models import Article, ArticleAttachment, Tag
+from .models import Article, Category, ArticleAttachment, Tag
 
 
 class TagAdmin(admin.ModelAdmin):
@@ -33,7 +33,7 @@ class ArticleAdmin(PublisherAdmin):
         "slug": ("title",),
     }
     filter_horizontal = ["tags"]
-    list_filter = ["language", "tags", PublisherPublishedFilter]
+    list_filter = ["language", "category", "tags", PublisherPublishedFilter]
     inlines = [ArticleAttachmentInline]
 
     def get_form(self, request, obj=None, **kwargs):
@@ -42,5 +42,13 @@ class ArticleAdmin(PublisherAdmin):
         return form
 
 
+class CategoryAdmin(admin.ModelAdmin):
+    model = Category
+    prepopulated_fields = {
+        "slug": ("title",),
+    }
+
+
 admin.site.register(Tag, TagAdmin)
 admin.site.register(Article, ArticleAdmin)
+admin.site.register(Category, CategoryAdmin)

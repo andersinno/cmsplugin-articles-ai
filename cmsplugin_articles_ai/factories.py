@@ -9,7 +9,7 @@ from django.utils import timezone
 from django.utils.text import slugify
 from factory import fuzzy
 
-from .models import Article, Tag
+from .models import Article, Category, Tag
 
 
 class UserFactory(factory.django.DjangoModelFactory):
@@ -31,6 +31,14 @@ class UserFactory(factory.django.DjangoModelFactory):
     )
 
 
+class CategoryFactory(factory.django.DjangoModelFactory):
+    title = fuzzy.FuzzyText(length=12, chars=string.ascii_letters)
+    slug = factory.LazyAttribute(lambda category: slugify(category.title))
+
+    class Meta:
+        model = Category
+
+
 class TagFactory(factory.django.DjangoModelFactory):
     name = fuzzy.FuzzyText(length=8, chars=string.ascii_letters)
     slug = factory.LazyAttribute(lambda tag: slugify(tag.name))
@@ -47,6 +55,7 @@ class ArticleFactory(factory.django.DjangoModelFactory):
     title = factory.Faker("catch_phrase")
     slug = factory.LazyAttribute(lambda article: slugify(article.title))
     published_from = timezone.now() - timedelta(days=1)
+    category = None
     author = factory.SubFactory(UserFactory)
     main_content = factory.Faker(
         "paragraph",
