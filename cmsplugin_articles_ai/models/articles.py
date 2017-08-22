@@ -13,6 +13,7 @@ from filer.fields.image import FilerImageField
 from publisher.models import PublisherModel
 from softchoice.fields.language import LanguageField
 
+from .categories import Category
 from .plugin_models import TagFilterMode
 from .tags import Tag
 
@@ -134,6 +135,14 @@ class Article(PublisherModel):
     )
     author = models.ForeignKey(
         User, verbose_name=_("author"), on_delete=models.PROTECT,
+    )
+    category = models.ForeignKey(
+        Category,
+        verbose_name=_("category"),
+        related_name="articles",
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
     )
     tags = models.ManyToManyField(
         Tag, verbose_name=_("tags"), related_name="articles", blank=True,
