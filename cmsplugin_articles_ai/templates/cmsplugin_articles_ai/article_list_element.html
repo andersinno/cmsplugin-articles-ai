@@ -7,7 +7,7 @@
         </h3>
 
         <p class="article-lift-summary">
-            {{ article.main_content|truncatechars:300 }}></a>
+            {{ article.main_content|truncatechars:300 }}
         </p>
 
         {% include "cmsplugin_articles_ai/tag_list.html" with tags=article.tags.all %}
