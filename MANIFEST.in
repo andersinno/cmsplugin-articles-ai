@@ -1,4 +1,4 @@
-include README.md
+include README.rst
 recursive-include cmsplugin_articles_ai *.*
 recursive-exclude cmsplugin_articles_ai ._*
 recursive-exclude cmsplugin_articles_ai .DS_Store
