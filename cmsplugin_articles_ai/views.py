@@ -4,7 +4,7 @@ from django.conf import settings
 from django.utils.translation import ugettext_lazy as _
 from publisher.views import PublisherDetailView, PublisherListView
 
-from .models import Article, Tag, TagFilterMode
+from .models import Article, Category, Tag, TagFilterMode
 
 
 class ArticleView(PublisherDetailView):
@@ -65,8 +65,33 @@ class ArticleListView(PublisherListView):
         context = super(ArticleListView, self).get_context_data(**kwargs)
         context.update({
             "all_tags": Tag.objects.all(),
+            "all_categories": Category.objects.all(),
             "page_title": self.tag_filter or _("All articles"),
             "tag_filter": self.tag_filter,
+        })
+        return context
+
+
+class CategoryView(ArticleListView):
+    """
+    View for listing all public articles belonging to certain category
+    that can be filtered by tag.
+    """
+
+    def get(self, request, *args, **kwargs):
+        category_slug = self.kwargs.get("category", "")
+        self.category = Category.objects.get(slug=category_slug)
+        return super(CategoryView, self).get(request, *args, **kwargs)
+
+    def get_queryset(self):
+        articles = super(CategoryView, self).get_queryset()
+        return articles.filter(category=self.category)
+
+    def get_context_data(self, **kwargs):
+        context = super(CategoryView, self).get_context_data(**kwargs)
+        context.update({
+            "category": self.category,
+            "page_title": self.category.title,
         })
         return context
 
