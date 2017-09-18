@@ -161,6 +161,10 @@ class Article(PublisherModel):
     modified_at = models.DateTimeField(
         _("last modified"), auto_now=True, editable=False,
     )
+    show_in_article_list_plugin = models.BooleanField(
+        verbose_name=_("show in article list plugin"),
+        default=True,
+    )
 
     objects = ArticleQuerySet.as_manager()
 

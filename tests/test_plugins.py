@@ -47,6 +47,23 @@ def test_article_list_plugin_article_count():
 
 
 @pytest.mark.django_db
+def test_article_list_plugin_show_flag():
+    """
+    Test article list plugin showing only the articles with the
+    show_in_article_list_plugin flag set to True
+    """
+    create_articles(3)
+    hidden_article = Article.objects.get(pk=3)
+    hidden_article.show_in_article_list_plugin = False
+    hidden_article.save()
+    publish_articles_with_publisher(Article.objects.all())
+    plugin = init_plugin(ArticleList, article_amount=3)
+    plugin_instance = plugin.get_plugin_class_instance()
+    context = plugin_instance.render({}, plugin, None)
+    assert len(context["articles"]) == 2
+
+
+@pytest.mark.django_db
 @pytest.mark.parametrize("language_filter", ["", "en", "fi"])
 def test_article_list_plugin_language_filter(language_filter):
     """
