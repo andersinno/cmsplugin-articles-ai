@@ -4,7 +4,7 @@ from cms.api import add_plugin
 from cms.models import Placeholder
 from cms.plugin_rendering import ContentRenderer
 from cmsplugin_articles_ai.cms_plugins import ArticleList, TagFilterArticleList, TagList
-from cmsplugin_articles_ai.factories import PublicArticleFactory, TagFactory
+from cmsplugin_articles_ai.factories import PublicArticleFactory, TagFactory, CategoryFactory
 from cmsplugin_articles_ai.models import Article
 from tests.test_views import publish_articles_with_publisher
 
@@ -44,6 +44,44 @@ def test_article_list_plugin_article_count():
     plugin_instance = plugin.get_plugin_class_instance()
     context = plugin_instance.render({}, plugin, None)
     assert len(context["articles"]) == 3
+
+
+@pytest.mark.django_db
+def test_article_list_category_exclusion():
+    """
+    Test article list plugin excluding articles which are within
+    the excluded categories
+    """
+    exclude_category = CategoryFactory()
+    create_articles(3)
+    hidden_article = Article.objects.last()
+    hidden_article.category = exclude_category
+    hidden_article.save()
+    publish_articles_with_publisher(Article.objects.all())
+    plugin = init_plugin(ArticleList, article_amount=3)
+    plugin.exclude_categories = (exclude_category,)
+    plugin_instance = plugin.get_plugin_class_instance()
+    context = plugin_instance.render({}, plugin, None)
+    assert len(context["articles"]) == 2
+
+
+@pytest.mark.django_db
+def test_article_list_tag_exclusion():
+    """
+    Test article list plugin excluding articles which contain
+    tags within the excluded tags
+    """
+    exclude_tag = TagFactory()
+    create_articles(3)
+    hidden_article = Article.objects.last()
+    hidden_article.tags.add(exclude_tag)
+    hidden_article.save()
+    publish_articles_with_publisher(Article.objects.all())
+    plugin = init_plugin(ArticleList, article_amount=3)
+    plugin.exclude_tags = (exclude_tag,)
+    plugin_instance = plugin.get_plugin_class_instance()
+    context = plugin_instance.render({}, plugin, None)
+    assert len(context["articles"]) == 2
 
 
 @pytest.mark.django_db

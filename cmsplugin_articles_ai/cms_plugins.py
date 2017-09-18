@@ -2,6 +2,7 @@
 from cms.models import CMSPlugin
 from cms.plugin_base import CMSPluginBase
 from cms.plugin_pool import plugin_pool
+from django.db.models import Q
 from django.utils.translation import ugettext_lazy as _
 from publisher.middleware import get_draft_status
 
@@ -13,12 +14,17 @@ class ArticleList(CMSPluginBase):
     module = _("Articles")
     name = _("List of latest articles")
     render_template = "cmsplugin_articles_ai/article_lift_list.html"
-    fields = ["article_amount", "language_filter"]
+    fields = ["article_amount", "language_filter", "exclude_categories", "exclude_tags"]
 
     def get_articles(self, plugin_conf):
         return Article.objects.public(
             language=plugin_conf.language_filter,
-        ).filter(publisher_is_draft=get_draft_status())
+        ).filter(
+            publisher_is_draft=get_draft_status()
+        ).exclude(
+            Q(category__in=plugin_conf.exclude_categories.all()) |
+            Q(tags__in=plugin_conf.exclude_tags.all())
+        )
 
     def render(self, context, instance, placeholder):
         context.update({
