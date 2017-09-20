@@ -86,3 +86,5 @@ class ArticleListPlugin(CMSPlugin):
         # version of this object.
         # Docs: http://docs.django-cms.org/en/latest/how_to/custom_plugins.html#for-many-to-many-or-foreign-key-relations-to-other-objects  # NOQA
         self.tags = oldinstance.tags.all()
+        self.exclude_categories = oldinstance.exclude_categories.all()
+        self.exclude_tags = oldinstance.exclude_tags.all()
