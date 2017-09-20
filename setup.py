@@ -3,7 +3,7 @@ from setuptools import find_packages, setup
 
 setup(
     name='cmsplugin-articles-ai',
-    version='0.2.1',
+    version='0.2.2',
     author='Anders Innovations',
     author_email='info@anders.fi',
     packages=find_packages(
