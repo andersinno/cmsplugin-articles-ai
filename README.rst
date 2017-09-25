@@ -59,7 +59,7 @@ AddThis integration
 
 There is support for including AddThis social share buttons using ``{% load addthis_share %}`` and
 then a ``{% render_addthis_share_buttons %}`` tag. Look for the usage example in the included
-template (```templates/cmsplugin_articles_ai/article_detail.html``).
+template (``templates/cmsplugin_articles_ai/article_detail.html``).
 
 To enable this add the following declarations with your AddThis details to your project's ``settings.py``:
 
