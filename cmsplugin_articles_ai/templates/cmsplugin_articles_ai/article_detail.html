@@ -1,5 +1,5 @@
 {% extends "cmsplugin_articles_ai/base.html" %}
-{% load thumbnail %}
+{% load addthis_share thumbnail %}
 
 {% block content %}
 
@@ -26,5 +26,7 @@
     <p>
         {{ article.main_content }}
     </p>
+
+    {% render_addthis_share_buttons %}
 
 {% endblock content %}
