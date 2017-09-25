@@ -54,6 +54,23 @@ published versions for all of them. Without a published version, article is not 
 to anonymous users!
 
 
+AddThis integration
+-------------------
+
+There is support for including AddThis social share buttons using ``{% load addthis_share %}`` and
+then a ``{% render_addthis_share_buttons %}`` tag. Look for the usage example in the included
+template (```templates/cmsplugin_articles_ai/article_detail.html``).
+
+To enable this add the following declarations with your AddThis details to your project's ``settings.py``:
+
+| ``ADDTHIS_SHARE_BUTTONS_URL = "//s7.addthis.com/js/300/addthis_widget.js#pubid=..."``
+| ``ADDTHIS_SHARE_BUTTONS_CSS_CLASS = "addthis_sharing_toolbox"``
+|
+NOTE: Set ``ADDTHIS_SHARE_BUTTONS_URL`` so that it contains the URL provided by AddThis. Not the entire
+HTML snippet, just the URL inside src="...". ``ADDTHIS_SHARE_BUTTONS_CSS_CLASS`` should contain name
+of the CSS class also provided by AddThis. This varies depending on which type of widget you chose.
+
+
 Installing for development
 --------------------------
 
