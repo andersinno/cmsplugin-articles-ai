@@ -61,6 +61,7 @@ class ArticleListPlugin(CMSPlugin):
     exclude_tags = models.ManyToManyField(
         Tag,
         verbose_name=_("exclude tags"),
+        blank=True,
         related_name="+",
     )
     article_amount = models.PositiveSmallIntegerField(
